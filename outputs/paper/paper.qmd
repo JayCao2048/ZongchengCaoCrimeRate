@@ -1,0 +1,158 @@
+---
+title: "Changing of Crime Rates Near UTSG Campus"
+author: "Zongcheng Cao"
+thanks: "Code and data are available at: https://github.com/JayCao2048/ZongchengCaoCrimeRate.git"
+date: today
+date-format: long
+abstract: "A prevelent belief of crime rate in downtown Toronto has been extremely high is spreading among the Chinese community. The belief lead to concerns regarding the safety problem of studying in University of Toronto St. George campus. This paper will investigate in the changing of four types of crime rates near University of Toronto St. George campus area from 2013 to 2024, ascertain the validity of such belief."
+format: pdf
+editor: visual
+toc: TRUE
+bibliography: references.bib
+---
+
+```{r echo=FALSE}
+# Load necessary libraries
+library(ggplot2, warn.conflicts = FALSE)
+library(tidyr, warn.conflicts = FALSE)
+library(dplyr, warn.conflicts = FALSE)
+```
+
+## 1 Introduction
+
+Media, a powerful tool that has the power to affect and change one's mindset, the effect of media can even spread across various communities. In this era of information, acquiring news is becoming much easier than before. With the growing of media, news about violent and crime in downtown Toronto starts to enter the vision of the public.
+
+As a Chinese immigrant who moved to Canada around ten years ago, I have had countless interaction with the Chinese community in Ontario. In recent years, a belief becomes much more popular across the Chinese community, which is about the safety issue of studying in University of Toronto St. George (UTSG) campus, due to the increase of violent and crime. I have heard numerous statement from Chinese parents and Chinese students who concerns the increase in risk of studying in UTSG campus, due to the large increment of crimes happening around the campus in recent years.
+
+This paper will investigate about the change of crime rate near UTSG campus area from the year 2014 to 2023, focusing on four typical types of crime that appear frequently in media, which are assault, robbery, shooting, and homicide. In the Data Section, a detailed analysis is dedicated to the four types of crime rate in area near UTSG campus, containing various graphs to demonstrate the change in these crime rate visually, to study the change of crime rate. In the Discussion section will include the patterns and results unearthed through the data analysis, and discuss the conflict between the data outcome and the belief about danger in study on campus in UTSG, furthermore explores how such phenomenon occurred.
+
+## 2 Data
+
+#### 2.1 Data Source
+
+The data used in this paper is from the database of Open Data portal of Toronto, and it is published by the Toronto Police Services. The official source from Police department can ensure the credibility of the crime rate data needed for this paper.
+
+The data recorded nine distinct types of crime from 2014 to current time, and the Toronto Police Services have been updated regularly. Two categories of each type of crime are included in the data. The first category is the count of a type of crime that occur in a particular year. The second category is the crime rate of a specific crime within a given year, which is calculated by crime count per 100,000 population [@citedata].
+
+As a separation of geometric areas of Toronto, the data divided Toronto neighborhood into 158 "small areas", and recorded the crime count and crime rate for each "small area" independently.
+
+The data is from [@opendatatoronto], and I used R language [@citeR] to process this paper. Various packages are also used to generate this paper, including tidyverse [@tidyverse], dplyr[@dplyr], ggplot2[@ggplot2].
+
+#### 2.2 Data Analysis
+
+This paper will be dedicated to three types of crimes that was mentioned in media the most, and widely discussed inside the Chinese community in Ontario. These crimes are assault, robbery, shooting, and homicide.
+
+Moreover, the paper will use the crime rate data rather than crime count, because the population of a specific area is unstable. With larger population, the probability of crime concurrency will rise, vice verse. For this reason, using the crime rate to exhibit the alterations of crime over 9 years is in a logically coherent manner, since the population will vary in 9 years.
+
+Since the interest of this research is about safety around UTSG campus, then among the 158 areas, three areas will be analysis through this paper. These three geometric places contained the campus itself, and where most UTSG students live, which are named "Bay-Cloverhill", "Church-Wellesley", and "University". Among these three places, "University" is the area that the campus is located, and most UTSG students reside in the area "Bay-Cloverhill" and "Church-Wellesley".
+
+```{r echo=FALSE}
+#read the analysis_data
+university_data <- read.csv("../../outputs/data/analysis_data.csv")
+# Reshape the data into a long format, gather only the assault rate data. 
+long_data1 <- gather(university_data, key = "Year", value = "Assault_Rate", ASSAULT_RATE_2014:ASSAULT_RATE_2023)
+
+# Convert Year to a more readable format.
+long_data1$Year <- sub("ASSAULT_RATE_", "", long_data1$Year)
+
+# Plotting the line graph for change in Assault Rate
+graph1 <- ggplot(long_data1, aes(x = Year, y = Assault_Rate, group = AREA_NAME, color = AREA_NAME)) +
+  geom_line() +
+  labs(title = "Figure 1: Change in Assault Rate from 2014 to 2023", x = "Year", y = "Assault Rate", color = "Area Name") + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        plot.title = element_text(size = 10))
+
+graph1
+```
+
+Figure 1 shows the change in assault rate from 2014 to 2023. There are three lines with distinct colors illustrating three different area names, where red represents "Bay-Cloverhill", green represents "Church-Wellesley", blue represents "University".
+
+From the figure, it is obvious that in the residential areas, "Church-Wellesley" has higher assault rate than "Bay-Cloverhill". The reason for this phenomenon to occur is the difference in facilities between these two areas. "Church-Wellesley" holds more facilities like bars, homeless shelters, cannabis shops, etc, which can end up with higher likelihood of assaults. Compare with "Church-Wellesley" area, buildings in "Bay-Cloverhill" area are mostly residential and commercial, which lower the probability of assaults.
+
+the assault rate of "University" is higher than the other two residential areas from 2014 to 2019. After 2019, the average assault rate has a sudden drop, followed by increment that have not surpass the assault rate before 2019. The unexpected drop can be explained by the incident of COVID-19 pandemic. During that special period, most in-person classes are canceled, transforming into online educating mode, which lead to minimum people in the campus. When the pandemic gradually fade out, more people start to return to the campus, causes the assault rate to rise again.
+
+```{r echo=FALSE}
+# Reshape the data into a long format, gather only the robbery rate data. 
+long_data2 <- gather(university_data, key = "Year", value = "Robbery_Rate", ROBBERY_RATE_2014:ROBBERY_RATE_2023)
+
+# Convert Year to a more readable format.
+long_data2$Year <- sub("ROBBERY_RATE_", "", long_data2$Year)
+
+# Plotting the line graph for change in Robbery Rate
+graph2 <- ggplot(long_data2, aes(x = Year, y = Robbery_Rate, group = AREA_NAME, color = AREA_NAME)) +
+  geom_line() +
+  labs(title = "Figure 2: Change in Robbery Rate from 2014 to 2023", x = "Year", y = "Robbery Rate", color = "Area Name") + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10))
+
+graph2
+```
+
+Figure 2 displays the robbery rate of the three selected areas. The color symbolizing is same as Figure 1. Robbery is a more serious crime than assault, so comapring Figure 2 with Figure 1, without a doubt, the robbery rate is much lower than assault rate.
+
+From 2014 to 2019, "University" area has a higher robbery rate than the other two areas unquestionably, which means that the campus has higher chance of robbery occur than residential area. However, the extremely high robbery rate in 2014 scale down rapidly, even becoming lower than "Church-Wellesley" area after 2018. Similar to Figure 1, the robbery rate experiences a severe drop during the pandemic, and starts to rise after 2020. Still, differentiate with the high robbery rate in 2004, around 700, the post-pandemic robbery rate never surpass 200, and even go through a slight drop from 2022 to 2023.
+
+```{r echo=FALSE}
+# Reshape the data into a long format, gather only the shooting rate data. 
+long_data3 <- gather(university_data, key = "Year", value = "Shooting_Rate", SHOOTING_RATE_2014:SHOOTING_RATE_2023)
+
+# Convert Year to a more readable format.
+long_data3$Year <- sub("SHOOTING_RATE_", "", long_data3$Year)
+
+# Plotting the line graph for change in Shooting Rate
+graph3 <- ggplot(long_data3, aes(x = Year, y = Shooting_Rate, group = AREA_NAME, color = AREA_NAME)) +
+  geom_line() +
+  labs(title = "Figure 3: Change in Shooting Rate from 2014 to 2023", x = "Year", y = "Shooting Rate", color = "Area Name") + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10))
+
+graph3
+```
+
+```{r echo=FALSE}
+# Reshape the data into a long format, gather only the homicide rate data. 
+long_data4 <- gather(university_data, key = "Year", value = "Homicide_Rate", HOMICIDE_RATE_2014:HOMICIDE_RATE_2023)
+
+# Convert Year to a more readable format.
+long_data4$Year <- sub("HOMICIDE_RATE_", "", long_data4$Year)
+
+# Plotting the line graph for change in Homicide Rate
+graph4 <- ggplot(long_data4, aes(x = Year, y = Homicide_Rate, group = AREA_NAME, color = AREA_NAME)) +
+  geom_line() +
+  labs(title = "Figure 4: Change in Homicide Rate from 2014 to 2023", x = "Year", y = "Homicide Rate", color = "Area Name") + 
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1), plot.title = element_text(size = 10))
+
+graph4
+```
+
+Figure 3 presents the shooting rate around the selected areas, and Figure 4 shows the homicide rate. These two crimes transpire much less than the assault and robbery due to the much severe outcomes. For that reason, shooting rate and homicide rate equal to zero for some years, such as there is no shooting in "University" area from 2014 to 2016. Also, no clear pattern can be detected through the line graphs due to the zero inputs, each line is fluctuating in different kinds of amplitudes. Nevertheless, some phenomena can be identified through comparison of the three different areas.
+
+In Figure 3, it is obvious that the when shooting happens, the shooting rate is "University" area is much higher than the residential areas, and the last shooting in "University" area happens in 2021. However, shootings in the residential area happened more often than the UTSG campus, but with a lower shooting rate.
+
+From Figure 4, the fluctuation are more random than figure 3. The reason for such situation is that homicides are much more difficult to prevent, and happen at random. For example, shooting can be prevented by regulating requirements for carrying firearms, assault and robbery can be prevented by increase police patrols, etc. Unlikely, homicides cannot be prohibit before wards like the other crimes. Still, by Figure 4, it is clear that in the past four year, only minimum homicides happened in the "Church-Wellesley" area, both "University" and "Bay-Cloverhill" areas maintain zero homicides.
+
+## 3 Results
+
+For the assault rate, the "University" area is experiencing a increment of assaults after the sudden drop in pandemic, but the assault rate have not surpass 1750, where the assault rate are much above 1750 from 2014 to 2018. The assault rate in the other two residential areas are more stabilized, where "Church-Wellesley" area's assault rate oscillates around 1500, and "Bay-Cloverhill" area's assault rate oscillates around 750. Therefore, there is no clear evidences point to the increment of assaulting near UTSG campus in recent years.
+
+For the robbery rate, a constant decrease can be witness in of the robbery rate in the "University" area starting from 2014, where the robbery rate is around 700. Recently, the robbery rate is stable around 150 in the "University" area. The residential areas have constant robbery rate since 2014, where "Church-Wellesley" area's robbery rate oscillates around 250, and "Bay-Cloverhill" area's robbery rate oscillates around 150. It is evidently that there has not been a severe increase of robbery in recent years.
+
+For the shooting rate, the graph varies in different amplitude. Both "University" and "Bay-Cloverhill" areas stay the same frequency and amounts of shooting as before. "Church-Wellesley" have a slight increment of shooting from 2022 to 2023, but it is the most remote area in this research from the UTSG campus, so the impact is minimized.
+
+For the homicide rate, the graph fluctuates a lot just like shooting rate. Nonetheless, the homicide rate are extremely low in the past four year, contrasting the high homicide rate around 10 from 2014 to 2019. The "University" and "Bay-Cloverhill" areas even maintain zero homicide rate after 2020. Clearly, homicide rate have not increase in recent years.
+
+From above, minimum evidence can prove that the crime rate near UTSG campus have been increasing at a drastic rate. Conversely, some crime rates are even undergoing a downsizing near the three selected areas. Thus, the belief of studying on campus in UTSG is becoming more dangerous than before cannot be backup by enough evidence. The study environment of UTSG campus has not witnessed an increase in hazard, some data even demonstrates that it is transforming into a comparatively safer state.
+
+## 4 Discussion
+
+There are many reasons for such belief starts spreading around the community. Undoubtedly, one of the main rationale is the media.
+
+In the modern world, technologies are improving at a faster and faster pace, more information have become easier to access in everyday life. Before wards, news are only accessible through newspaper or TV. Nowadays, we can read any news just with a simple click on the phone. For that reason, more information about violence and crimes starts to interference our life, and affecting what we actual belief. Unfortunately, some media is dedicated to exaggerating their reports, even publishing unreal news, just to gain more views and attention. As a result, these information has the power to change one's mindset, and spreading anxiety in various communities.
+
+Living in this world of information, it is essential to have the ability of distinguishing between real and counterfeit, using scientific ways to prove what is real and what should we believe in.
+
+\newpage
+
+## Reference
