@@ -36,7 +36,7 @@ The data recorded nine distinct types of crime from 2014 to current time, and th
 
 As a separation of geometric areas of Toronto, the data divided Toronto neighborhood into 158 "small areas", and recorded the crime count and crime rate for each "small area" independently.
 
-The data is from [@opendatatoronto], and I used R language [@citeR] to process this paper. Various packages are also used to generate this paper, including tidyverse [@tidyverse], dplyr[@dplyr], ggplot2[@ggplot2].
+The data is from [@opendatatoronto], and I used R language [@citeR] to process this paper. Various packages are also used to generate this paper, including tidyverse [@tidyverse], dplyr[@dplyr], ggplot2[@ggplot2]. Also, Chatgpt has been used for generating R code [@openai_chatgpt4]
 
 #### 2.2 Data Analysis
 
